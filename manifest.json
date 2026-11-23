@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "RED — боевой расчёт",
+  "version": "1.0.0",
+  "description": "Расчёт попаданий и урона для Cyberpunk RED",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "RED — боевой расчёт"
+  }
+}
