@@ -30,9 +30,11 @@ button:disabled { cursor: default; }
 
 .popup { padding: 16px; }
 .popup-header {
-  padding: 4px 0 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 12px;
   border-bottom: 1px solid var(--border);
-  border-left: 3px solid var(--primary);
 }
 h1, h2, p { margin: 0; }
 h1 { font-size: 24px; letter-spacing: -.035em; line-height: 1.25; }
