@@ -1,50 +1,23 @@
-import { Attack, weapons } from './combat';
-
-export interface Opponent extends Attack {
-  name: string;
-  targetId?: string;
-}
-
-export interface Player {
-  id: string;
-  name: string;
-  armor: number;
-}
-
-interface Battle {
-  roster: Opponent[];
-  players: Player[];
-}
+import { weapons } from '../domain/rangedAttack';
+import { createOpponent } from '../domain/roster';
+import type { Opponent, Player, SavedActions } from '../domain/roster';
 
 const storageKey = 'cprc.roster.v1';
 
-export function createOpponent(number: number): Opponent {
-  return {
-    name: 'Противник ' + number,
-    weapon: 'pistol',
-    base: 10,
-    modifier: 0,
-    distance: 6,
-    dice: weapons.pistol.dice,
-    armor: 0,
-    evasion: null,
-  };
-}
-
-export function loadBattle(storage: Storage): Battle {
+export function loadActions(storage: Storage): SavedActions {
   const saved: unknown = JSON.parse(storage.getItem(storageKey) ?? 'null');
   if (saved === null) return { roster: [createOpponent(1)], players: [] };
   if (Array.isArray(saved) && saved.every(isOpponent)) {
     return { roster: saved, players: [] };
   }
   if (typeof saved === 'object') {
-    const { roster, players } = saved as Partial<Battle>;
+    const { roster, players } = saved as Partial<SavedActions>;
     if (Array.isArray(roster) && roster.every(isOpponent) &&
       Array.isArray(players) && players.every(isPlayer)) {
       return { roster, players };
     }
   }
-  throw new Error('Invalid saved battle');
+  throw new Error('Invalid saved actions data');
 }
 
 function isPlayer(value: unknown): value is Player {
@@ -70,6 +43,6 @@ function isOpponent(value: unknown): value is Opponent {
     (opponent.evasion === null || Number.isInteger(opponent.evasion));
 }
 
-export function saveBattle(storage: Storage, battle: Battle): void {
-  storage.setItem(storageKey, JSON.stringify(battle));
+export function saveActions(storage: Storage, actions: SavedActions): void {
+  storage.setItem(storageKey, JSON.stringify(actions));
 }
